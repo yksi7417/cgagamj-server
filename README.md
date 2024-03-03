@@ -43,3 +43,7 @@ https://drive.google.com/drive/folders/10jrwQPDNv1Gswi_wRddnNs54UpBhIpaC?usp=dri
 ```
 C:\dvlp\cgagamj-server\python>pip install -e .
 ```
+
+# to get vosk models 
+
+https://alphacephei.com/vosk/models
