@@ -25,3 +25,9 @@ download latest version of flatc from https://github.com/google/flatbuffers/rele
 
 pip install -r src/python/requirements.txt 
 
+
+# .env files 
+
+the environment variables are handled as secrets and hence not checked into the git repo.   Currently the files are stored here and you'd need permission to obtain the env variables 
+
+https://drive.google.com/drive/folders/10jrwQPDNv1Gswi_wRddnNs54UpBhIpaC?usp=drive_link
