@@ -22,8 +22,8 @@ download latest version of flatc from https://github.com/google/flatbuffers/rele
 ```
 
 ```
-(mqtt) c:\dvlp\cgagamj-server\>cd src\python\common
-(mqtt) c:\dvlp\cgagamj-server\src\python\common>..\..\..\proto\flatc.exe --python mahjong.fbs
+(mqtt) c:\dvlp\cgagamj-server\>cd python\src\common
+(mqtt) c:\dvlp\cgagamj-server\python\src\common>..\..\..\proto\flatc.exe --python mahjong.fbs
 ```
 
 # Requirements.txt for python 
@@ -38,3 +38,8 @@ the environment variables are handled as secrets and hence not checked into the 
 https://drive.google.com/drive/folders/10jrwQPDNv1Gswi_wRddnNs54UpBhIpaC?usp=drive_link
 
 
+# to install package:
+
+```
+C:\dvlp\cgagamj-server\python>pip install -e .
+```
