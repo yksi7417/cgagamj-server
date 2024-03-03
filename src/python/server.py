@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 from paho.mqtt import client as mqtt_client
 
+import flatbuffers
+from common.mahjong import Suit, Wind, Tile, Player, Game
+
 whoami = os.path.splitext(os.path.basename(__file__))[0]  # remove the extension
 dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)

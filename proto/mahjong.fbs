@@ -17,26 +17,24 @@ enum Wind: byte {
   WEST = 3
 }
 
-table Tile {
-  suit: Suit;
-  rank: short ;
-}
+// To get from byte -> Tile, use the following algorithm
+// tile / 10 -> suits , tile % 10 -> rank 
 
 table Player {
   id: string;
   name: string;
-  hidden_tiles: [Tile];
-  shown_tiles: [Tile];
+  hidden_tiles: [byte];
+  shown_tiles: [byte];
   is_banker: bool;
   account_balance: short ;
-  seat: Wind;
+  seat: byte;
 }
 
 table Game {
   players: [Player];
-  discarded_tiles: [Tile];
-  current_turn: Wind;
-  current_wind: Wind;
+  discarded_tiles: [byte];
+  current_turn: byte;
+  current_wind: byte;
   current_round: short; 
 }
 

@@ -53,14 +53,16 @@ class Game(object):
     def DiscardedTiles(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
-            x = self._tab.Vector(o)
-            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
-            x = self._tab.Indirect(x)
-            from mahjong.Tile import Tile
-            obj = Tile()
-            obj.Init(self._tab.Bytes, x)
-            return obj
-        return None
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Int8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Game
+    def DiscardedTilesAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Int8Flags, o)
+        return 0
 
     # Game
     def DiscardedTilesLength(self):
@@ -120,7 +122,7 @@ def AddDiscardedTiles(builder, discardedTiles):
     GameAddDiscardedTiles(builder, discardedTiles)
 
 def GameStartDiscardedTilesVector(builder, numElems):
-    return builder.StartVector(4, numElems, 4)
+    return builder.StartVector(1, numElems, 1)
 
 def StartDiscardedTilesVector(builder, numElems: int) -> int:
     return GameStartDiscardedTilesVector(builder, numElems)

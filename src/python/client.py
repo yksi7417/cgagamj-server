@@ -4,6 +4,9 @@ import os
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 
+import flatbuffers
+from common.mahjong import Suit, Wind, Tile, Player, Game
+
 whoami = os.path.splitext(os.path.basename(__file__))[0]  # remove the extension
 dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)
@@ -18,9 +21,9 @@ print(f"{whoami} Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topi
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc, list_of_stuff):
         if rc == 0:
-            print('{whoami} Connected to MQTT Broker!', client, userdata, flags, rc, list_of_stuff)
+            print(f'{whoami} Connected to MQTT Broker!', client, userdata, flags, rc, list_of_stuff)
         else:
-            print('{whoami} Failed to connect, return code %d\n', rc)
+            print(f'{whoami} Failed to connect, return code %d\n', rc)
 
     def on_log(client, userdata, paho_log_level, messages):
         print(message)
@@ -36,6 +39,8 @@ def connect_mqtt():
 
 def publish(client):
     msg_count = 0
+    builder = flatbuffers.Builder(1024)
+
     while True:
         time.sleep(1)
         msg = f"messages: {msg_count}"
@@ -46,6 +51,21 @@ def publish(client):
             print(f'{whoami} Send `{msg}` to topic `{topic}`')
         else:
             print(f'{whoami} Failed to send message to topic {topic}')
+
+        Tile.Start(builder)
+        Tile.AddSuit(builder, Suit.BAMBOO)
+        Tile.AddRank(builder, 1)
+        tile = Tile.End(builder)
+        builder.complete(tile)
+        buf = builder.Output()
+        result = client.publish(topic, msg)
+        status = result[0]
+        if status == 0:
+            print(f'{whoami} Send `{msg}` to topic `{topic}`')
+        else:
+            print(f'{whoami} Failed to send message to topic {topic}')
+
+
         msg_count += 1
 
 
