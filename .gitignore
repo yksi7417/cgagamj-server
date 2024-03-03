@@ -41,3 +41,6 @@
 **/__pycache__/** 
 *.pyc
 **/*.egg-info
+
+# Speech Models 
+vosk-model**/
