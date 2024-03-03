@@ -1,18 +1,20 @@
 # python 3.8
 
-import random
 import time
 
+import os 
+from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 
-broker = 'ieea4188.ala.us-east-1.emqxsl.com'
-port = 8883
-topic = "python/mqtt"
-# generate client ID with pub prefix randomly
-client_id = f'python-mqtt-{random.randint(0, 1000)}'
-username = 'client'
-password = 'cgaga11840Power'
+dotenv_path = os.path.join(os.path.dirname(__file__), 'client', '.env')
+load_dotenv(dotenv_path)
+broker = os.environ.get("broker")
+port = int(os.environ.get("port"))
+topic = os.environ.get("topic")
+username = os.environ.get("client_username")
+password = os.environ.get("password")
 
+print(f"Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic}\nUsername: {username}")
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc, list_of_stuff):
@@ -24,12 +26,7 @@ def connect_mqtt():
     def on_log(client, userdata, paho_log_level, messages):
         print(message)
 
-
-    # client = mqtt_client.Client(client_id)
-    # client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5)
-
-    # client.tls_set(ca_certs='./server-ca.crt')
     client.username_pw_set(username, password)
     client.tls_set(ca_certs='./common/server-ca.crt')
     client.on_connect = on_connect

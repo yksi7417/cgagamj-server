@@ -1,25 +1,18 @@
 # python3.8
 
-import random
-
+import os 
+from dotenv import load_dotenv
 from paho.mqtt import client as mqtt_client
 
 dotenv_path = os.path.join(os.path.dirname(__file__), 'server', '.env')
 load_dotenv(dotenv_path)
-
-SECRET_KEY = 
-DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD")
-
-broker = 'ieea4188.ala.us-east-1.emqxsl.com'
-port = 8883
-topic = os.environ.get("username")
-username = os.environ.get("username")
+broker = os.environ.get("broker")
+port = int(os.environ.get("port"))
+topic = os.environ.get("topic")
+username = os.environ.get("server_username")
 password = os.environ.get("password")
 
-
-client_id = f'python-mqtt-{random.randint(0, 100)}'
-
-
+print(f"Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic}\nUsername: {username}")
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc, list_of_stuff):
@@ -31,7 +24,6 @@ def connect_mqtt() -> mqtt_client:
     def on_log(client, userdata, paho_log_level, messages):
         print(message)
 
-    # client = mqtt_client.Client(client_id)
     client = mqtt_client.Client(mqtt_client.CallbackAPIVersion.VERSION2, protocol=mqtt_client.MQTTv5)
 
     client.tls_set(ca_certs='./common/server-ca.crt')
