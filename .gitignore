@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Secrets 
+*.secret
+*.secrets
+**/.env
+*.crt

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package mahjong;
+
+// Enum for the suits of the tiles
+enum Suit {
+  BAMBOO = 0;
+  CHARACTER = 1;
+  DOT = 2;
+}
+
+// Enum for the seats of the players
+enum Seat {
+  NORTH = 0;
+  SOUTH = 1;
+  EAST = 2;
+  WEST = 3;
+}
+
+// Represents a tile in the game
+message Tile {
+  Suit suit = 1;  // The suit of the tile
+  int32 rank = 2;   // The rank of the tile (1-9)
+}
+
+// Represents a player in the game
+message Player {
+  string id = 1;  // The ID of the player
+  string name = 2;
+  repeated Tile hidden_tiles = 3;  // The tiles currently held by the player but hidden from others
+  repeated Tile shown_tiles = 4;  // The tiles currently shown to all players
+  bool is_banker = 5;       // Indicates if the player is the banker
+  int32 account_balance = 6; // The player's account balance
+  Seat seat = 7;  // The seat of the player
+}
+
+// Represents a game in progress
+message Game {
+  repeated Player players = 1;
+  repeated Tile discarded_tiles = 2;  // The tiles discarded in the game
+  string current_turn = 3;
+  string next_turn = 4; // The player who will play next
+}
+
