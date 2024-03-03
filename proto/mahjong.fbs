@@ -1,6 +1,6 @@
 namespace mahjong;
 
-enum Suit: byte {
+enum Suit: ubyte {
   BAMBOO = 0,
   CHARACTER = 1,
   DOT = 2, 
@@ -10,30 +10,30 @@ enum Suit: byte {
   SEASONS = 6
 }
 
-enum Wind: byte {
+enum Wind: ubyte {
   NORTH = 0,
   SOUTH = 1,
   EAST = 2,
   WEST = 3
 }
 
-// To get from byte -> Tile, use the following algorithm
+// To get from ubyte -> Tile, use the following algorithm
 // tile / 10 -> suits , tile % 10 -> rank 
 
 table Player {
   id: ulong;
   name: string;
-  hidden_tiles: [byte];
-  shown_tiles: [byte];
+  hidden_tiles: [ubyte];
+  shown_tiles: [ubyte];
   account_balance: short ;
-  seat: byte;
+  seat: ubyte;
 }
 
 table Game {
-  players: [ulong];
-  discarded_tiles: [byte];
-  current_wind: byte;     // it's the round of East, and East seat is the banker 
-  current_turn: byte;     // represented by Wind, e.g.  it's South's turn
+  players: [Player];
+  discarded_tiles: [ubyte];
+  current_wind: ubyte;     // it's the round of East, and East seat is the banker 
+  current_turn: ubyte;     // represented by Wind, e.g.  it's South's turn
   current_round: short;   // represented by number 
 }
 
