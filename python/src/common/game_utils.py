@@ -1,8 +1,7 @@
 from common.mahjong import Suit, Wind, Player, Game
 import flatbuffers 
 
-def new_game() -> Game:
-    builder = flatbuffers.Builder(1024)
+def new_game(builder: flatbuffers.Builder) -> Game:
     discarded_tiles = [143, 0, 122]
     Game.GameStartDiscardedTilesVector(builder, len(discarded_tiles))
 
@@ -18,13 +17,15 @@ def new_game() -> Game:
     Game.AddDiscardedTiles(builder, discarded_tiles_fb)
     game = Game.End(builder)
     builder.Finish(game)
-    return bytes(builder.Output())
-
+    return game
 
 
 def decode_game(payload: bytes) -> Game:
     game = Game.Game.GetRootAsGame(payload, 0)
     return game
+
+def encode_game(builder: flatbuffers.Builder) -> bytes:
+    return bytes(builder.Output())
 
 def print_game(game: Game):
 

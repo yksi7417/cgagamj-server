@@ -52,15 +52,21 @@ https://alphacephei.com/vosk/models
 
 ```
 conda activate mqtt 
-(mqtt) c:\dvlp\cgagamj-server\python>pytest
+(mqtt) c:\dvlp\cgagamj-server\python>pytest -s
 =========================================================================================================== test session starts ============================================================================================================
 platform win32 -- Python 3.12.2, pytest-8.0.2, pluggy-1.4.0
 rootdir: c:\dvlp\cgagamj-server\python
 collected 2 items
 
-tests\test_tilemap.py ..                                                                                                                                                                                                              [100%]
+tests\test_game_utils.py b'\x14\x00\x00\x00\x00\x00\x0e\x00\x0c\x00\x00\x00\x04\x00\x00\x00\x00\x00\n\x00\x0e\x00\x00\x00\x08\x00\x00\x00\x00\x00\x01\x00\x03\x00\x00\x00\x8f\x00z\x00'
+Current wind: 0
+Current turn: 0
+Current round: 1
+Discarded tiles: [143   0 122]
+.
+tests\test_tilemap.py .
 
-============================================================================================================ 2 passed in 0.06s =============================================================================================================
+============================================================================================================ 2 passed in 0.25s =============================================================================================================
 ```
 
 # how to run integration test 

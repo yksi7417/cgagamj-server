@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 
 import flatbuffers
 from common.mahjong import Suit, Wind, Player, Game
-from common.game_utils import new_game
+from common.game_utils import new_game, encode_game
 
 whoami = os.path.splitext(os.path.basename(__file__))[0]  
 
@@ -53,13 +53,14 @@ def publish(client):
         else:
             print(f'{whoami} Failed to send message to topic {topic}')
 
-        result = client.publish(flatbuffer_topic, new_game())
+        game_builder = flatbuffers.Builder(1024)
+        my_new_game = new_game(game_builder)
+        result = client.publish(flatbuffer_topic, encode_game(game_builder))
         status = result[0]
         if status == 0:
             print(f'{whoami} Send `{result}` to topic `{topic}`')
         else:
             print(f'{whoami} Failed to send message to topic {topic}')
-
 
         msg_count += 1
 
