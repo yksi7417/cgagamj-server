@@ -1,9 +1,6 @@
 import random
 
-def add(a, b):
-    return a + b
-
-def get_randomized_full_size():
+def get_randomized_full_set():
     unique_tiles=[]
     for i in range(4):
         unique_tiles.extend(list(range(36)))
