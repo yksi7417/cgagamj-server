@@ -28,16 +28,14 @@ class Game(object):
     def Players(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
-            a = self._tab.Vector(o)
-            return self._tab.Get(flatbuffers.number_types.Uint64Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 8))
-        return 0
-
-    # Game
-    def PlayersAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint64Flags, o)
-        return 0
+            x = self._tab.Vector(o)
+            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
+            x = self._tab.Indirect(x)
+            from mahjong.Player import Player
+            obj = Player()
+            obj.Init(self._tab.Bytes, x)
+            return obj
+        return None
 
     # Game
     def PlayersLength(self):
@@ -112,7 +110,7 @@ def AddPlayers(builder, players):
     GameAddPlayers(builder, players)
 
 def GameStartPlayersVector(builder, numElems):
-    return builder.StartVector(8, numElems, 8)
+    return builder.StartVector(4, numElems, 4)
 
 def StartPlayersVector(builder, numElems: int) -> int:
     return GameStartPlayersVector(builder, numElems)
