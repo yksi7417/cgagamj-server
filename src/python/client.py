@@ -1,27 +1,26 @@
-# python 3.8
-
 import time
 
 import os 
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 
-dotenv_path = os.path.join(os.path.dirname(__file__), 'client', '.env')
+whoami = os.path.splitext(os.path.basename(__file__))[0]  # remove the extension
+dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)
 broker = os.environ.get("broker")
 port = int(os.environ.get("port"))
 topic = os.environ.get("topic")
-username = os.environ.get("client_username")
+username = os.environ.get(f'{whoami}_username')
 password = os.environ.get("password")
 
-print(f"Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic}\nUsername: {username}")
+print(f"{whoami} Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic}\nUsername: {username}")
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc, list_of_stuff):
         if rc == 0:
-            print("Connected to MQTT Broker!", client, userdata, flags, rc, list_of_stuff)
+            print('{whoami} Connected to MQTT Broker!', client, userdata, flags, rc, list_of_stuff)
         else:
-            print("Failed to connect, return code %d\n", rc)
+            print('{whoami} Failed to connect, return code %d\n', rc)
 
     def on_log(client, userdata, paho_log_level, messages):
         print(message)
@@ -44,16 +43,20 @@ def publish(client):
         # result: [0, 1]
         status = result[0]
         if status == 0:
-            print(f"Send `{msg}` to topic `{topic}`")
+            print(f'{whoami} Send `{msg}` to topic `{topic}`')
         else:
-            print(f"Failed to send message to topic {topic}")
+            print(f'{whoami} Failed to send message to topic {topic}')
         msg_count += 1
 
 
 def run():
     client = connect_mqtt()
     client.loop_start()
-    publish(client)
+    try:
+        publish(client)
+    except KeyboardInterrupt:
+        print(f'{whoami} Exiting gracefully')
+        client.disconnect()
 
 
 if __name__ == '__main__':

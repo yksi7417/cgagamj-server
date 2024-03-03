@@ -1,25 +1,24 @@
-# python3.8
-
 import os 
 from dotenv import load_dotenv
 from paho.mqtt import client as mqtt_client
 
-dotenv_path = os.path.join(os.path.dirname(__file__), 'server', '.env')
+whoami = os.path.splitext(os.path.basename(__file__))[0]  # remove the extension
+dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)
 broker = os.environ.get("broker")
 port = int(os.environ.get("port"))
 topic = os.environ.get("topic")
-username = os.environ.get("server_username")
+username = os.environ.get(f'{whoami}_username')
 password = os.environ.get("password")
 
-print(f"Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic}\nUsername: {username}")
+print(f"{whoami} Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic}\nUsername: {username}")
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc, list_of_stuff):
         if rc == 0:
-            print("Connected to MQTT Broker!")
+            print(f'{whoami} Connected to MQTT Broker!')
         else:
-            print("Failed to connect, return code %d\n", rc)
+            print(f'{whoami} Failed to connect, return code %d\n', rc)
 
     def on_log(client, userdata, paho_log_level, messages):
         print(message)
@@ -37,7 +36,7 @@ def connect_mqtt() -> mqtt_client:
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
-        print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+        print(f"{whoami} Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
     client.subscribe(topic)
     client.on_message = on_message
@@ -46,8 +45,11 @@ def subscribe(client: mqtt_client):
 def run():
     client = connect_mqtt()
     subscribe(client)
-    client.loop_forever()
-
+    try:
+        client.loop_forever()
+    except KeyboardInterrupt:
+        print(f'{whoami} Exiting gracefully')
+        client.disconnect()
 
 if __name__ == '__main__':
     run()
