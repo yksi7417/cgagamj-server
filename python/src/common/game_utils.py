@@ -1,8 +1,10 @@
 from common.mahjong import Suit, Wind, Player, Game
+from common.tilemap import get_randomized_full_set
 import flatbuffers 
 
+
 def new_game(builder: flatbuffers.Builder) -> Game:
-    discarded_tiles = [143, 0, 122]
+    discarded_tiles = get_randomized_full_set()
     Game.GameStartDiscardedTilesVector(builder, len(discarded_tiles))
 
     for tile in reversed(discarded_tiles):
