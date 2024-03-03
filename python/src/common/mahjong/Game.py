@@ -54,14 +54,14 @@ class Game(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             a = self._tab.Vector(o)
-            return self._tab.Get(flatbuffers.number_types.Int8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
     # Game
     def DiscardedTilesAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
-            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Int8Flags, o)
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
     # Game
@@ -80,14 +80,14 @@ class Game(object):
     def CurrentWind(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
     # Game
     def CurrentTurn(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
     # Game
@@ -128,13 +128,13 @@ def StartDiscardedTilesVector(builder, numElems: int) -> int:
     return GameStartDiscardedTilesVector(builder, numElems)
 
 def GameAddCurrentWind(builder, currentWind):
-    builder.PrependInt8Slot(2, currentWind, 0)
+    builder.PrependUint8Slot(2, currentWind, 0)
 
 def AddCurrentWind(builder, currentWind):
     GameAddCurrentWind(builder, currentWind)
 
 def GameAddCurrentTurn(builder, currentTurn):
-    builder.PrependInt8Slot(3, currentTurn, 0)
+    builder.PrependUint8Slot(3, currentTurn, 0)
 
 def AddCurrentTurn(builder, currentTurn):
     GameAddCurrentTurn(builder, currentTurn)
