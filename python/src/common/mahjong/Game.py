@@ -79,14 +79,14 @@ class Game(object):
         return o == 0
 
     # Game
-    def CurrentTurn(self):
+    def CurrentWind(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
     # Game
-    def CurrentWind(self):
+    def CurrentTurn(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
@@ -129,17 +129,17 @@ def GameStartDiscardedTilesVector(builder, numElems):
 def StartDiscardedTilesVector(builder, numElems: int) -> int:
     return GameStartDiscardedTilesVector(builder, numElems)
 
-def GameAddCurrentTurn(builder, currentTurn):
-    builder.PrependInt8Slot(2, currentTurn, 0)
-
-def AddCurrentTurn(builder, currentTurn):
-    GameAddCurrentTurn(builder, currentTurn)
-
 def GameAddCurrentWind(builder, currentWind):
-    builder.PrependInt8Slot(3, currentWind, 0)
+    builder.PrependInt8Slot(2, currentWind, 0)
 
 def AddCurrentWind(builder, currentWind):
     GameAddCurrentWind(builder, currentWind)
+
+def GameAddCurrentTurn(builder, currentTurn):
+    builder.PrependInt8Slot(3, currentTurn, 0)
+
+def AddCurrentTurn(builder, currentTurn):
+    GameAddCurrentTurn(builder, currentTurn)
 
 def GameAddCurrentRound(builder, currentRound):
     builder.PrependInt16Slot(4, currentRound, 0)

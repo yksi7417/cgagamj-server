@@ -93,28 +93,21 @@ class Player(object):
         return o == 0
 
     # Player
-    def IsBanker(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
-        if o != 0:
-            return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
-        return False
-
-    # Player
     def AccountBalance(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int16Flags, o + self._tab.Pos)
         return 0
 
     # Player
     def Seat(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
 def PlayerStart(builder):
-    builder.StartObject(7)
+    builder.StartObject(6)
 
 def Start(builder):
     PlayerStart(builder)
@@ -155,20 +148,14 @@ def PlayerStartShownTilesVector(builder, numElems):
 def StartShownTilesVector(builder, numElems: int) -> int:
     return PlayerStartShownTilesVector(builder, numElems)
 
-def PlayerAddIsBanker(builder, isBanker):
-    builder.PrependBoolSlot(4, isBanker, 0)
-
-def AddIsBanker(builder, isBanker):
-    PlayerAddIsBanker(builder, isBanker)
-
 def PlayerAddAccountBalance(builder, accountBalance):
-    builder.PrependInt16Slot(5, accountBalance, 0)
+    builder.PrependInt16Slot(4, accountBalance, 0)
 
 def AddAccountBalance(builder, accountBalance):
     PlayerAddAccountBalance(builder, accountBalance)
 
 def PlayerAddSeat(builder, seat):
-    builder.PrependInt8Slot(6, seat, 0)
+    builder.PrependInt8Slot(5, seat, 0)
 
 def AddSeat(builder, seat):
     PlayerAddSeat(builder, seat)

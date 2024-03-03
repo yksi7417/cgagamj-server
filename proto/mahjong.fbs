@@ -21,21 +21,20 @@ enum Wind: byte {
 // tile / 10 -> suits , tile % 10 -> rank 
 
 table Player {
-  id: string;
+  id: ulong;
   name: string;
   hidden_tiles: [byte];
   shown_tiles: [byte];
-  is_banker: bool;
   account_balance: short ;
   seat: byte;
 }
 
 table Game {
-  players: [Player];
+  players: [ulong];
   discarded_tiles: [byte];
-  current_turn: byte;
-  current_wind: byte;
-  current_round: short; 
+  current_wind: byte;     // it's the round of East, and East seat is the banker 
+  current_turn: byte;     // represented by Wind, e.g.  it's South's turn
+  current_round: short;   // represented by number 
 }
 
 root_type Game;
