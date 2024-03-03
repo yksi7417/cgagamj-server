@@ -28,8 +28,8 @@ class Player(object):
     def Id(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+            return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
+        return 0
 
     # Player
     def Name(self):
@@ -120,7 +120,7 @@ def Start(builder):
     PlayerStart(builder)
 
 def PlayerAddId(builder, id):
-    builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(id), 0)
+    builder.PrependUint64Slot(0, id, 0)
 
 def AddId(builder, id):
     PlayerAddId(builder, id)
