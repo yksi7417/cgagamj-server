@@ -3,8 +3,9 @@ import pyaudio
 from vosk import Model, KaldiRecognizer
 
 # Load the model
-#model = Model("vosk-model-small-en-us-0.15")
-model = Model("vosk-model-small-cn-0.22")
+model = Model("vosk-model-small-en-us-0.15")
+#model = Model("vosk-model-small-cn-0.22")
+#model = Model("vosk-model-en-us-0.42-gigaspeech")
 
 # Create a recognizer
 rec = KaldiRecognizer(model, 16000)
