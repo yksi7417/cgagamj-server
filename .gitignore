@@ -36,3 +36,7 @@
 *.secrets
 **/.env
 *.crt
+
+# Python 
+**/__pycache__/** 
+*.pyc
