@@ -21,6 +21,11 @@ download latest version of flatc from https://github.com/google/flatbuffers/rele
                2 Dir(s)  53,127,581,696 bytes free
 ```
 
+```
+(mqtt) c:\dvlp\cgagamj-server\>cd src\python\common
+(mqtt) c:\dvlp\cgagamj-server\src\python\common>..\..\..\proto\flatc.exe --python mahjong.fbs
+```
+
 # Requirements.txt for python 
 
 pip install -r src/python/requirements.txt 
@@ -31,3 +36,5 @@ pip install -r src/python/requirements.txt
 the environment variables are handled as secrets and hence not checked into the git repo.   Currently the files are stored here and you'd need permission to obtain the env variables 
 
 https://drive.google.com/drive/folders/10jrwQPDNv1Gswi_wRddnNs54UpBhIpaC?usp=drive_link
+
+

@@ -3,10 +3,14 @@ namespace mahjong;
 enum Suit: byte {
   BAMBOO = 0,
   CHARACTER = 1,
-  DOT = 2
+  DOT = 2, 
+  WINDS = 3, 
+  DRAGONS = 4, 
+  FLOWERS = 5, 
+  SEASONS = 6
 }
 
-enum Seat: byte {
+enum Wind: byte {
   NORTH = 0,
   SOUTH = 1,
   EAST = 2,
@@ -15,7 +19,7 @@ enum Seat: byte {
 
 table Tile {
   suit: Suit;
-  rank: int;
+  rank: short ;
 }
 
 table Player {
@@ -24,15 +28,16 @@ table Player {
   hidden_tiles: [Tile];
   shown_tiles: [Tile];
   is_banker: bool;
-  account_balance: int;
-  seat: Seat;
+  account_balance: short ;
+  seat: Wind;
 }
 
 table Game {
   players: [Player];
   discarded_tiles: [Tile];
-  current_turn: string;
-  next_turn: string;
+  current_turn: Wind;
+  current_wind: Wind;
+  current_round: short; 
 }
 
 root_type Game;
