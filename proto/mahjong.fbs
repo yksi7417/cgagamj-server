@@ -1,0 +1,38 @@
+namespace mahjong;
+
+enum Suit: byte {
+  BAMBOO = 0,
+  CHARACTER = 1,
+  DOT = 2
+}
+
+enum Seat: byte {
+  NORTH = 0,
+  SOUTH = 1,
+  EAST = 2,
+  WEST = 3
+}
+
+table Tile {
+  suit: Suit;
+  rank: int;
+}
+
+table Player {
+  id: string;
+  name: string;
+  hidden_tiles: [Tile];
+  shown_tiles: [Tile];
+  is_banker: bool;
+  account_balance: int;
+  seat: Seat;
+}
+
+table Game {
+  players: [Player];
+  discarded_tiles: [Tile];
+  current_turn: string;
+  next_turn: string;
+}
+
+root_type Game;
