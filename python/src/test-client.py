@@ -1,4 +1,5 @@
 import time
+import colorama
 
 import os 
 from dotenv import load_dotenv
@@ -8,7 +9,7 @@ import flatbuffers
 from common.mahjong import Suit, Wind, Player, Game
 from common.game_utils import new_game, encode_game
 
-whoami = os.path.splitext(os.path.basename(__file__))[0]  
+whoami = (os.path.splitext(os.path.basename(__file__))[0]).replace("test-","")
 
 dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)
@@ -42,7 +43,7 @@ def connect_mqtt():
 def publish(client):
     msg_count = 0
 
-    while True:
+    for i in range(0,3):
         time.sleep(1)
         msg = f"messages: {msg_count}"
         result = client.publish(topic, msg)
@@ -52,6 +53,7 @@ def publish(client):
             print(f'{whoami} Send `{msg}` to topic `{topic}`')
         else:
             print(f'{whoami} Failed to send message to topic {topic}')
+        msg_count += 1
 
         game_builder = flatbuffers.Builder(1024)
         my_new_game = new_game(game_builder)
@@ -63,6 +65,8 @@ def publish(client):
             print(f'{whoami} Failed to send message to topic {topic}')
 
         msg_count += 1
+    
+    assert msg_count == 6 , "Didn't publish enough messages! "
 
 
 def run():
@@ -71,8 +75,9 @@ def run():
     try:
         publish(client)
     except KeyboardInterrupt:
-        print(f'{whoami} Exiting gracefully')
-        client.disconnect()
+        print("KeyboardInterrupt")
+    print(f'{whoami} Exiting gracefully')
+    client.disconnect()
 
 
 if __name__ == '__main__':

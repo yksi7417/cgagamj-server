@@ -1,5 +1,7 @@
 import os 
 import numpy
+import time
+import colorama
 
 from dotenv import load_dotenv
 from paho.mqtt import client as mqtt_client
@@ -8,7 +10,8 @@ import flatbuffers
 from common.mahjong import Suit, Wind, Player, Game
 from common.game_utils import print_game, decode_game
 
-whoami = os.path.splitext(os.path.basename(__file__))[0]  # remove the extension
+whoami = (os.path.splitext(os.path.basename(__file__))[0]).replace("test-","")  
+
 dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)
 broker = os.environ.get("broker")
@@ -41,14 +44,24 @@ def connect_mqtt() -> mqtt_client:
     return client
 
 
+msg_counter = 0
+flatbuffer_msg_count = 0 
+expected_msg_count = 3 
+
 def subscribe(client: mqtt_client):
+
     def on_message(client, userdata, msg):
+        global msg_counter
+        global flatbuffer_msg_count
+
         if (msg.topic == topic):
             print(f"{whoami} Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+            msg_counter+=1; 
         else:
             game=decode_game(msg.payload)
             print(f"{whoami} Received `{game}` from `{msg.topic}` topic")
             print_game(game)
+            flatbuffer_msg_count+=1; 
 
     client.subscribe(topic)
     client.subscribe(flatbuffer_topic)
@@ -56,13 +69,27 @@ def subscribe(client: mqtt_client):
 
 
 def run():
+    global msg_counter
+    global flatbuffer_msg_count
+
     client = connect_mqtt()
     subscribe(client)
+    client.loop_start()
+
     try:
-        client.loop_forever()
+        timeout = time.time() + 30   # 30 seconds from now
+        while True:
+            time.sleep(1)
+            if msg_counter >= expected_msg_count and flatbuffer_msg_count >= expected_msg_count or time.time() > timeout:
+                break
     except KeyboardInterrupt:
-        print(f'{whoami} Exiting gracefully')
-        client.disconnect()
+        print(f'{whoami} KeyboardInterrupt')
+
+    print(f'{whoami} Exiting gracefully')
+    client.disconnect()
+
+    assert msg_counter == expected_msg_count, "Not enough messages!"
+    assert flatbuffer_msg_count == expected_msg_count, "Not enough binary messages!"
 
 if __name__ == '__main__':
     run()

@@ -11,4 +11,3 @@ def test_encode_decode_print():
     dgame = decode_game(payload)
     print_game(dgame)
 
-

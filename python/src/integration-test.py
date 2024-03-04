@@ -8,7 +8,7 @@ def run_script(script_path):
         print('Process running {} received KeyboardInterrupt. Exiting...'.format(script_path))
 
 if __name__ == "__main__":
-    scripts = ['server.py', 'client.py']  
+    scripts = ['test-server.py', 'test-client.py']  
     processes = []
     for script in scripts:
         process = multiprocessing.Process(target=run_script, args=(script,))
