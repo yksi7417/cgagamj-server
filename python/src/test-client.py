@@ -21,6 +21,8 @@ username = os.environ.get(f'{whoami}_username')
 password = os.environ.get("password")
 print(f"{whoami} Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic} & flatbuffer_topic: {flatbuffer_topic}\nUsername: {username}")
 
+msg_count = 0
+
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc, list_of_stuff):
         if rc == 0:
@@ -41,7 +43,7 @@ def connect_mqtt():
 
 
 def publish(client):
-    msg_count = 0
+    global msg_count
 
     for i in range(0,3):
         time.sleep(1)
@@ -66,8 +68,6 @@ def publish(client):
 
         msg_count += 1
     
-    assert msg_count == 6 , "Didn't publish enough messages! "
-
 
 def run():
     client = connect_mqtt()
@@ -82,3 +82,6 @@ def run():
 
 if __name__ == '__main__':
     run()
+    if (msg_count != 6):
+        assert msg_count == 6 , "Didn't publish enough messages! "
+        exit -1 

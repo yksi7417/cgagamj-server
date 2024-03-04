@@ -7,7 +7,7 @@ def run_script(script_path):
     except KeyboardInterrupt:
         print('Process running {} received KeyboardInterrupt. Exiting...'.format(script_path))
 
-if __name__ == "__main__":
+def main():
     scripts = ['test-server.py', 'test-client.py']  
     processes = []
     for script in scripts:
@@ -25,3 +25,6 @@ if __name__ == "__main__":
             process.terminate()
 
     print('Main program exits gracefully')
+
+if __name__ == "__main__":
+    main()
