@@ -50,7 +50,7 @@ class Game(object):
         return o == 0
 
     # Game
-    def DiscardedTiles(self, j):
+    def UnusedTiles(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             a = self._tab.Vector(o)
@@ -58,47 +58,74 @@ class Game(object):
         return 0
 
     # Game
-    def DiscardedTilesAsNumpy(self):
+    def UnusedTilesAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
     # Game
-    def DiscardedTilesLength(self):
+    def UnusedTilesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # Game
-    def DiscardedTilesIsNone(self):
+    def UnusedTilesIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
     # Game
-    def CurrentWind(self):
+    def DiscardedTiles(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
     # Game
-    def CurrentTurn(self):
+    def DiscardedTilesAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Game
+    def DiscardedTilesLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # Game
+    def DiscardedTilesIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # Game
+    def CurrentWind(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
     # Game
-    def CurrentRound(self):
+    def CurrentTurn(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
+        return 0
+
+    # Game
+    def CurrentRound(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int16Flags, o + self._tab.Pos)
         return 0
 
 def GameStart(builder):
-    builder.StartObject(5)
+    builder.StartObject(6)
 
 def Start(builder):
     GameStart(builder)
@@ -115,8 +142,20 @@ def GameStartPlayersVector(builder, numElems):
 def StartPlayersVector(builder, numElems: int) -> int:
     return GameStartPlayersVector(builder, numElems)
 
+def GameAddUnusedTiles(builder, unusedTiles):
+    builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(unusedTiles), 0)
+
+def AddUnusedTiles(builder, unusedTiles):
+    GameAddUnusedTiles(builder, unusedTiles)
+
+def GameStartUnusedTilesVector(builder, numElems):
+    return builder.StartVector(1, numElems, 1)
+
+def StartUnusedTilesVector(builder, numElems: int) -> int:
+    return GameStartUnusedTilesVector(builder, numElems)
+
 def GameAddDiscardedTiles(builder, discardedTiles):
-    builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(discardedTiles), 0)
+    builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(discardedTiles), 0)
 
 def AddDiscardedTiles(builder, discardedTiles):
     GameAddDiscardedTiles(builder, discardedTiles)
@@ -128,19 +167,19 @@ def StartDiscardedTilesVector(builder, numElems: int) -> int:
     return GameStartDiscardedTilesVector(builder, numElems)
 
 def GameAddCurrentWind(builder, currentWind):
-    builder.PrependUint8Slot(2, currentWind, 0)
+    builder.PrependUint8Slot(3, currentWind, 0)
 
 def AddCurrentWind(builder, currentWind):
     GameAddCurrentWind(builder, currentWind)
 
 def GameAddCurrentTurn(builder, currentTurn):
-    builder.PrependUint8Slot(3, currentTurn, 0)
+    builder.PrependUint8Slot(4, currentTurn, 0)
 
 def AddCurrentTurn(builder, currentTurn):
     GameAddCurrentTurn(builder, currentTurn)
 
 def GameAddCurrentRound(builder, currentRound):
-    builder.PrependInt16Slot(4, currentRound, 0)
+    builder.PrependInt16Slot(5, currentRound, 0)
 
 def AddCurrentRound(builder, currentRound):
     GameAddCurrentRound(builder, currentRound)

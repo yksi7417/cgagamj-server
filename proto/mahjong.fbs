@@ -17,8 +17,28 @@ enum Wind: ubyte {
   WEST = 3
 }
 
+
+enum Dragons: ubyte {
+  RED = 0,
+  GREEN = 1,
+  WHITE = 2
+}
+
+
 // To get from ubyte -> Tile, use the following algorithm
-// tile / 10 -> suits , tile % 10 -> rank 
+// start w/ bamboo - 9 tiles x 4 = 36
+// then CHARACTER  - 9 times x 4 = 36
+// then DOT        - 9 times x 4 = 36
+// then WINDS      - 4 times x 4 = 16
+// then DRAGONS    - 3 times x 4 = 12
+// then FLOWERS    - 4 times x 1 =  4
+// then SEASONS    - 4 times x 1 =  4
+//                    total      =144 tiles 
+
+table Tile {
+    suit: ubyte;
+    card_number: ubyte;
+}
 
 table Player {
   id: ulong;
@@ -31,6 +51,7 @@ table Player {
 
 table Game {
   players: [Player];
+  unused_tiles: [ubyte];
   discarded_tiles: [ubyte];
   current_wind: ubyte;     // it's the round of East, and East seat is the banker 
   current_turn: ubyte;     // represented by Wind, e.g.  it's South's turn

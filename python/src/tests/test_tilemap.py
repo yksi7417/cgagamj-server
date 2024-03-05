@@ -10,5 +10,7 @@ def test_full_set():
 
 
 def test_map_number_to_tiles():
-    for i in range(1,11):
+    for i in range(0,10):
+        assert get_suit(i) == SuitEnum.BAMBOO
+    for i in range(10,):
         assert get_suit(i) == SuitEnum.BAMBOO
