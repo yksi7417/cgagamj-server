@@ -4,19 +4,19 @@ import flatbuffers
 
 
 def new_game(builder: flatbuffers.Builder) -> Game:
-    discarded_tiles = get_randomized_full_set()
-    Game.GameStartDiscardedTilesVector(builder, len(discarded_tiles))
+    unused_tiles = get_randomized_full_set()
+    Game.GameStartUnusedTilesVector(builder, len(unused_tiles))
 
-    for tile in reversed(discarded_tiles):
+    for tile in reversed(unused_tiles):
         builder.PrependByte(tile)
 
-    discarded_tiles_fb = builder.EndVector()
+    unused_tiles_fb = builder.EndVector()
 
     Game.Start(builder)
     Game.AddCurrentRound(builder, 1)
     Game.AddCurrentTurn(builder, 0)
     Game.AddCurrentWind(builder, 0)
-    Game.AddDiscardedTiles(builder, discarded_tiles_fb)
+    Game.AddUnusedTiles(builder, unused_tiles_fb)
     game = Game.End(builder)
     builder.Finish(game)
     return game
@@ -46,5 +46,6 @@ def print_game(game: Game):
         print(f"  Seat: {player.Seat()}")
 
     print(f"Discarded tiles: {game.DiscardedTilesAsNumpy()}")
+    print(f"Unused tiles: {game.UnusedTilesAsNumpy()}")
 
 
