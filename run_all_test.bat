@@ -1,4 +1,4 @@
 pytest -s 
-pushd python\src
-python integration-test.py
+pushd python\src\integration-tests
+python server-client.py
 popd
