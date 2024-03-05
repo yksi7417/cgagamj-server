@@ -26,7 +26,7 @@ enum Dragons: ubyte {
 
 
 // To get from ubyte -> Tile, use the following algorithm
-// start w/ bamboo - 9 tiles x 4 = 36
+// start w/ BAMBOO - 9 tiles x 4 = 36
 // then CHARACTER  - 9 times x 4 = 36
 // then DOT        - 9 times x 4 = 36
 // then WINDS      - 4 times x 4 = 16

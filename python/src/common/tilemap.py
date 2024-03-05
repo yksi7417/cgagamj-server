@@ -8,7 +8,7 @@ def get_randomized_full_set():
     return unique_tiles
 
 def get_suit(tile_number : int):
-    if (0 < tile_number and tile_number < 36):
+    if (tile_number >= 0 and tile_number < 36):
         return SuitEnum.BAMBOO
     elif (tile_number < 72):
         return SuitEnum.CHARACTER
@@ -25,9 +25,6 @@ def get_suit(tile_number : int):
 
 
 def get_card_number(tile_number : int):
-    if (0 < tile_number and tile_number < 36):
-        return SuitEnum.BAMBOO
-
     if (tile_number >= 140):
         return tile_number - 140 
     elif (tile_number >= 136):
