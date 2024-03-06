@@ -1,7 +1,7 @@
 from typing import List
 import flatbuffers
 
-from common.mahjong import Suit, Wind, Player, Game
+from mahjong import Suit, Wind, Player, Game
 from common.game_utils import new_game, encode_game
 
 class GameStateNotificationService:

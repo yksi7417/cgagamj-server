@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 
 import flatbuffers
-from common.mahjong import Suit, Wind, Player, Game
+from mahjong import Suit, Wind, Player, Game
 from common.game_utils import new_game, encode_game
 
 whoami = (os.path.splitext(os.path.basename(__file__))[0]).replace("test-","")
