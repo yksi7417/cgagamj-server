@@ -1,55 +1,32 @@
-from typing import List 
 import flatbuffers 
+from typing import List 
 
-from common.mahjong import Suit, Wind, Player, Tile, Game
+from common.mahjong import Suit, Wind, Player, Game
 from common.tilemap import get_randomized_full_set
-
-# class GameBuilder:
-#     def __init__(self, builder: flatbuffers.Builder):
-#         self.builder = builder 
-#         Game.Start(self.builder)
-#         pass
-
-#     def AddUnusedTiles(self, tiles: List[Tile]) -> 'GameBuilder': 
-#         return self
-
-#     def AddDiscardedTiles(self, tiles: List[Tile]) -> 'GameBuilder': 
-#         if len(tiles) > 0:
-#             Game.GameStartDiscardedTilesVector(self.builder, len(tiles))
-#             for tile in reversed(tiles):
-#                 self.builder.PrependByte(tile)
-#             tiles_fb = self.builder.EndVector()
-#             Game.AddUnusedTiles(self.builder, tiles_fb)
-#         return self
-
-#     def AddPlayers(self, players: List[Player]) -> 'GameBuilder': 
-#         return self
 
 
 def new_game(builder: flatbuffers.Builder, players: List[Player]) -> Game:
-    tiles = get_randomized_full_set()
-    if len(tiles) > 0:
-        Game.GameStartUnusedTilesVector(builder, len(tiles))
-        for tile in reversed(tiles):
-            builder.PrependByte(tile)
-        tiles_fb = builder.EndVector()
-        Game.AddUnusedTiles(builder, tiles_fb)
+    unused_tiles = get_randomized_full_set()
+    Game.GameStartUnusedTilesVector(builder, len(unused_tiles))
 
-    # gb.AddPlayers(players)
+    for tile in reversed(unused_tiles):
+        builder.PrependByte(tile)
+
+    unused_tiles_fb = builder.EndVector()
+
+    Game.Start(builder)
     Game.AddCurrentRound(builder, 1)
     Game.AddCurrentTurn(builder, 0)
     Game.AddCurrentWind(builder, 0)
-    my_new_game = Game.End(builder)
-    builder.Finish(my_new_game)
+    Game.AddUnusedTiles(builder, unused_tiles_fb)
+    game = Game.End(builder)
+    builder.Finish(game)
+    return game
 
 
 def decode_game(payload: bytes) -> Game:
     game = Game.Game.GetRootAsGame(payload, 0)
     return game
-
-def encode_game(game: Game) -> bytes:
-
-    return bytes(builder.Output())
 
 def encode_game(builder: flatbuffers.Builder) -> bytes:
     return bytes(builder.Output())
