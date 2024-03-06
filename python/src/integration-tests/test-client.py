@@ -58,7 +58,8 @@ def publish(client):
         msg_count += 1
 
         game_builder = flatbuffers.Builder(1024)
-        my_new_game = new_game(game_builder)
+        game = new_game(game_builder, players=[])
+
         result = client.publish(flatbuffer_topic, encode_game(game_builder))
         status = result[0]
         if status == 0:

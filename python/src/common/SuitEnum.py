@@ -8,3 +8,4 @@ class SuitEnum(Enum):
     DRAGONS = 4
     FLOWERS = 5
     SEASONS = 6
+
