@@ -58,4 +58,10 @@ table Game {
   current_round: short;   // represented by number 
 }
 
-root_type Game;
+union AnyState { Player, Game }
+
+table Message {
+  state: AnyState;
+}
+
+root_type Message;

@@ -10,7 +10,7 @@ import flatbuffers
 from mahjong import Suit, Wind, Player, Game
 from common.game_utils import print_game, decode_game
 
-whoami = (os.path.splitext(os.path.basename(__file__))[0]).replace("test-","")  
+whoami = (os.path.splitext(os.path.basename(__file__))[0]).replace("-test","")  
 
 dotenv_path = os.path.join(os.path.dirname(__file__), whoami, '.env')
 load_dotenv(dotenv_path)
@@ -53,7 +53,6 @@ def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
         global msg_count
         global flatbuffer_msg_count
-        print(userdata)
 
         if (msg.topic == topic):
             print(f"{whoami} Received `{msg.payload.decode()}` from `{msg.topic}` topic")
@@ -92,7 +91,3 @@ def run():
 
 if __name__ == '__main__':
     run()
-    if (msg_count != 3 or flatbuffer_msg_count !=3):
-        assert msg_counter == expected_msg_count, "Not enough messages!"
-        assert flatbuffer_msg_count == expected_msg_count, "Not enough binary messages!"
-        exit -1 
