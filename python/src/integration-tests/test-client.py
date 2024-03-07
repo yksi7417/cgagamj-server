@@ -8,6 +8,7 @@ import paho.mqtt.client as mqtt
 import flatbuffers
 from mahjong import Suit, Wind, Player, Game
 from common.game_utils import new_game, encode_game
+from common.PlayerState import PlayerState
 
 whoami = (os.path.splitext(os.path.basename(__file__))[0]).replace("test-","")
 
@@ -22,6 +23,14 @@ password = os.environ.get("password")
 print(f"{whoami} Connecting to MQTT Broker: {broker}\nPort: {port}\nTopic: {topic} & flatbuffer_topic: {flatbuffer_topic}\nUsername: {username}")
 
 msg_count = 0
+
+# Sample data for 4 players
+temp_players = [
+    PlayerState(1, "Alice", [1, 2, 3], [], 1000, 0),
+    PlayerState(2, "Bob", [6, 7, 8], [9, 10], 2000, 1),
+    PlayerState(3, "Charlie", [11, 12, 13], [14, 15], 3000, 2),
+    PlayerState(4, "Dave", [], [19, 20], 4000, 3),
+]
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc, list_of_stuff):
@@ -58,7 +67,7 @@ def publish(client):
         msg_count += 1
 
         game_builder = flatbuffers.Builder(1024)
-        game = new_game(game_builder, players=[])
+        game = new_game(game_builder, players=temp_players)
 
         result = client.publish(flatbuffer_topic, encode_game(game_builder))
         status = result[0]

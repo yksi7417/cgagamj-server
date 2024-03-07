@@ -3,24 +3,7 @@ from typing import List
 
 from mahjong import Suit, Wind, Player, Game
 from common.tilemap import get_randomized_full_set
-
-class PlayerState:
-    def __init__(self, id, name, hidden_tiles, shown_tiles, account_balance, seat):
-        self.id = id
-        self.name = name
-        self.hidden_tiles = hidden_tiles
-        self.shown_tiles = shown_tiles
-        self.account_balance = account_balance
-        self.seat = seat
-
-# Sample data for 4 players
-temp_players = [
-    PlayerState(1, "Alice", [1, 2, 3], [4, 5], 1000, 0),
-    PlayerState(2, "Bob", [6, 7, 8], [9, 10], 2000, 1),
-    PlayerState(3, "Charlie", [11, 12, 13], [14, 15], 3000, 2),
-    PlayerState(4, "Dave", [16, 17, 18], [19, 20], 4000, 3),
-]
-
+from common.PlayerState import PlayerState
 
 def generate_player_vector(builder: flatbuffers.Builder, players: List[PlayerState]):
     players_fb = None
@@ -63,7 +46,7 @@ def generate_player_vector(builder: flatbuffers.Builder, players: List[PlayerSta
     return players_fb
 
 
-def new_game(builder: flatbuffers.Builder, players: List[Player]) -> Game:
+def new_game(builder: flatbuffers.Builder, players: List[PlayerState]) -> Game:
     unused_tiles = get_randomized_full_set()
 
     unused_tiles_fb = None
@@ -73,7 +56,7 @@ def new_game(builder: flatbuffers.Builder, players: List[Player]) -> Game:
             builder.PrependByte(tile)
         unused_tiles_fb = builder.EndVector()
 
-    players_fb = generate_player_vector(builder, temp_players)
+    players_fb = generate_player_vector(builder, players)
 
     Game.Start(builder)
     Game.AddCurrentRound(builder, 1)
@@ -90,7 +73,6 @@ def new_game(builder: flatbuffers.Builder, players: List[Player]) -> Game:
     builder.Finish(game)
     return game
 
-
 def decode_game(payload: bytes) -> Game:
     game = Game.Game.GetRootAsGame(payload, 0)
     return game
@@ -99,23 +81,12 @@ def encode_game(builder: flatbuffers.Builder) -> bytes:
     return bytes(builder.Output())
 
 def print_game(game: Game):
-
-    print(f"Current wind: {game.CurrentWind()}")
-    print(f"Current turn: {game.CurrentTurn()}")
-    print(f"Current round: {game.CurrentRound()}")
-
+    print(f"Current Wind: {game.CurrentWind()} Turn: {game.CurrentTurn()} Round: {game.CurrentRound()}")
     for i in range(game.PlayersLength()):
         player = game.Players(i)
-        print(f"Player {i}:")
-        print(f"  ID: {player.Id()}")
-        print(f"  Name: {player.Name()}")
-        for j in range(player.HiddenTilesLength()):
-            print(f"  Hidden tiles: {player.HiddenTiles(j)}")
-        for j in range(player.ShownTilesLength()):
-            print(f"  Shown tiles: {player.ShownTiles(j)}")
-        print(f"  Account balance: {player.AccountBalance()}")
-        print(f"  Seat: {player.Seat()}")
-
+        print(f"Player ID: {player.Id()} Name: {player.Name()} Account Balance: {player.AccountBalance()} Seat: {player.Seat()}")
+        print(f"  Hidden tiles: {[player.HiddenTiles(j) for j in range(player.HiddenTilesLength())]}")
+        print(f"  Shown tiles: {[player.ShownTiles(j) for j in range(player.ShownTilesLength())]}")
     print(f"Discarded tiles: {game.DiscardedTilesAsNumpy()}")
     print(f"Unused tiles: {game.UnusedTilesAsNumpy()}")
 
